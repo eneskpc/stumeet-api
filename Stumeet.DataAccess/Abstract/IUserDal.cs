@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using Stumeet.Core.DataAccess;
-using Stumeet.DataAccess.Concrete;
+using Stumeet.Entities.Concrete;
 
 namespace Stumeet.DataAccess.Abstract
 {
-    public interface IProductDal:IEntityRepository<Product>
+    public interface IUserDal:IEntityRepository<User>
     {
     }
 }

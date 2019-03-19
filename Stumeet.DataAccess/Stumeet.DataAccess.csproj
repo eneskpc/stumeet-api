@@ -10,11 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Stumeet.Core\Stumeet.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Abstract\" />
-    <Folder Include="Concrete\" />
+    <ProjectReference Include="..\Stumeet.Entities\Stumeet.Entities.csproj" />
   </ItemGroup>
 
 </Project>
