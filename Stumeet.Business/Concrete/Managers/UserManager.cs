@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Stumeet.Business.Abstract;
 using Stumeet.Business.ValidationRules.FluentValidation;
 using Stumeet.Core.CrossCuttingConcerns.Validation.FluentValidation;
@@ -18,26 +19,26 @@ namespace Stumeet.Business.Concrete.Managers
             _userDal = userDal;
         }
 
-        public User Add(User user)
+        public async Task<User> Add(User user)
+        {
+            ValidatorTool.Validate(new UserValidator(), user); 
+            return await _userDal.Add(user);
+        }
+
+        public async Task<List<User>> GetAll()
+        {
+            return await _userDal.GetList();
+        }
+
+        public async Task<User> GetByID(int id)
+        {
+            return await _userDal.Get(u => u.Id == id);
+        }
+
+        public async Task<User> Update(User user)
         {
             ValidatorTool.Validate(new UserValidator(), user);
-            return _userDal.Add(user);
-        }
-
-        public List<User> GetAll()
-        {
-            return _userDal.GetList();
-        }
-
-        public User GetByID(int id)
-        {
-            return _userDal.Get(u => u.Id == id);
-        }
-
-        public User Update(User user)
-        {
-            ValidatorTool.Validate(new UserValidator(), user);
-            return _userDal.Update(user);
+            return await _userDal.Update(user);
         }
     }
 }

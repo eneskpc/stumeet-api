@@ -11,8 +11,7 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
         {
         }
 
-        public StumeetDBContext(DbContextOptions<StumeetDBContext> options)
-            : base(options)
+        public StumeetDBContext(DbContextOptions<StumeetDBContext> options) : base(options)
         {
         }
 
@@ -44,7 +43,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
-            
             modelBuilder.Entity<Asset>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -63,7 +61,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
-
             modelBuilder.Entity<Authentication>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -78,7 +75,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
-
             modelBuilder.Entity<DataTypeExtension>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -93,7 +89,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
-
             modelBuilder.Entity<DataType>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -106,7 +101,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
-
             modelBuilder.Entity<DeletedMessage>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -119,7 +113,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
-
             modelBuilder.Entity<EducationInformation>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -132,7 +125,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
-
             modelBuilder.Entity<EventParticipant>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -143,7 +135,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
-
             modelBuilder.Entity<Event>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -170,7 +161,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
-
             modelBuilder.Entity<MessageGroupMember>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -183,7 +173,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
-
             modelBuilder.Entity<MessageGroup>(entity =>
             {
                 entity.Property(e => e.Id)
@@ -198,7 +187,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
-
             modelBuilder.Entity<Message>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -213,7 +201,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
-
             modelBuilder.Entity<PostComment>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -226,7 +213,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
-
             modelBuilder.Entity<Post>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -243,7 +229,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
-
             modelBuilder.Entity<University>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -256,7 +241,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
-
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -285,7 +269,6 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
-
             modelBuilder.Entity<WorkInformation>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");

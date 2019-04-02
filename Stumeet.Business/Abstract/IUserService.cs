@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Stumeet.Business.Abstract
 {
     public interface IUserService
     {
-        List<User> GetAll();
-        User GetByID(int id);
-        User Add(User user);
-        User Update(User user);
+        Task<List<User>> GetAll();
+        Task<User> GetByID(int id);
+        Task<User> Add(User user);
+        Task<User> Update(User user);
     }
 }

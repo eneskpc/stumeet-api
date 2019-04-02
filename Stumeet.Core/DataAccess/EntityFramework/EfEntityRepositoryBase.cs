@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Stumeet.Core.Entities;
 
@@ -12,55 +13,57 @@ namespace Stumeet.Core.DataAccess.EntityFramework
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
     {
-        public List<TEntity> GetList(Expression<Func<TEntity, bool>> filter = null)
+        public async Task<List<TEntity>> GetList(Expression<Func<TEntity, bool>> filter = null)
         {
             using (var context = new TContext())
             {
                 return filter == null ?
-                    context.Set<TEntity>().ToList() :
-                    context.Set<TEntity>().Where(filter).ToList();
+                    await context.Set<TEntity>().ToListAsync() :
+                    await context.Set<TEntity>().Where(filter).ToListAsync();
             }
         }
 
-        public TEntity Get(Expression<Func<TEntity, bool>> filter = null)
+        public async Task<TEntity> Get(Expression<Func<TEntity, bool>> filter = null)
         {
             using (var context = new TContext())
             {
                 return filter == null ?
-                    context.Set<TEntity>().FirstOrDefault() :
-                    context.Set<TEntity>().Where(filter).FirstOrDefault();
+                    await context.Set<TEntity>().FirstOrDefaultAsync() :
+                    await context.Set<TEntity>().Where(filter).FirstOrDefaultAsync();
             }
         }
 
-        public TEntity Add(TEntity entity)
+        public async Task<TEntity> Add(TEntity entity)
         {
             using (var context = new TContext())
             {
                 var addedEntity = context.Entry(entity);
                 addedEntity.State = EntityState.Added;
-                context.SaveChanges();
-                return entity;
+                if (await context.SaveChangesAsync() > 0)
+                    return entity;
+                return null;
             }
         }
 
-        public TEntity Update(TEntity entity)
+        public async Task<TEntity> Update(TEntity entity)
         {
             using (var context = new TContext())
             {
                 var updatedEntity = context.Entry(entity);
                 updatedEntity.State = EntityState.Modified;
-                context.SaveChanges();
-                return entity;
+                if (await context.SaveChangesAsync() > 0)
+                    return entity;
+                return null;
             }
         }
 
-        public void Delete(TEntity entity)
+        public async void Delete(TEntity entity)
         {
             using (var context = new TContext())
             {
                 var deletedEntity = context.Entry(entity);
                 deletedEntity.State = EntityState.Deleted;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
     }
