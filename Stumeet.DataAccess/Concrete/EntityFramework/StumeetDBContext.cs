@@ -31,6 +31,7 @@ namespace Stumeet.DataAccess.Concrete.EntityFramework
         public virtual DbSet<University> Universities { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<WorkInformation> WorkInformation { get; set; }
+        public virtual DbSet<Test> Tests { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
