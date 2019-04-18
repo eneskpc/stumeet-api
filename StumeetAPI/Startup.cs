@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using StumeetAPI.Business.Abstract;
+using StumeetAPI.Business.Concrete.Managers;
+using StumeetAPI.DTOs;
 
 namespace StumeetAPI
 {
@@ -24,6 +27,9 @@ namespace StumeetAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IMailService, MailManager>();
+            services.AddScoped<IUserService, UserManager>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

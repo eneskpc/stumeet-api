@@ -1,9 +1,10 @@
-﻿using System;
+﻿using StumeetAPI.Core.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace StumeetAPI.Entities.Concrete
 {
-    public partial class User
+    public partial class User : IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
