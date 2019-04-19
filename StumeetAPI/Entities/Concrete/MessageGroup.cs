@@ -1,9 +1,10 @@
-﻿using System;
+﻿using StumeetAPI.Core.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace StumeetAPI.Entities.Concrete
 {
-    public partial class MessageGroup
+    public partial class MessageGroup : IEntity
     {
         public int Id { get; set; }
         public string GroupName { get; set; }

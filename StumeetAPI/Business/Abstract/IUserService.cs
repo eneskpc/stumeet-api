@@ -10,7 +10,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IUserService
     {
-        Task<List<User>> GetAll();
+        Task<List<User>> GetAll(Expression<Func<User, bool>> filter = null);
         Task<User> GetByID(int id);
         Task<User> GetByCondition(Expression<Func<User, bool>> filter = null);
         Task<User> Add(User user);

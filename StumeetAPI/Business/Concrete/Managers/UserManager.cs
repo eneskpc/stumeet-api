@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,12 +21,14 @@ namespace StumeetAPI.Business.Concrete.Managers
     public class UserManager : IUserService
     {
         private IUserDal _userDal;
+        private IAuthenticationDal _authDal;
         private IConfiguration _configuration;
         private IMailService _mailManager;
 
-        public UserManager(IUserDal userDal, IConfiguration configuration, IMailService mailManager)
+        public UserManager(IUserDal userDal, IAuthenticationDal authDal, IConfiguration configuration, IMailService mailManager)
         {
             _userDal = userDal;
+            _authDal = authDal;
             _configuration = configuration;
             _mailManager = mailManager;
         }
@@ -55,9 +58,9 @@ namespace StumeetAPI.Business.Concrete.Managers
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<List<User>> GetAll()
+        public async Task<List<User>> GetAll(Expression<Func<User, bool>> filter = null)
         {
-            return await _userDal.GetList();
+            return filter == null ? await _userDal.GetList() : await _userDal.GetList(filter);
         }
 
         public async Task<User> GetByCondition(Expression<Func<User, bool>> filter = null)
@@ -109,6 +112,27 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _userDal.Update(user);
         }
 
+        private static string GetMd5Hash(MD5 md5Hash, string input)
+        {
+
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
+        }
+
         public async Task<User> Register(UserForRegister userForRegister)
         {
             if (await _userDal.Get(u => u.Email == userForRegister.Email) != null)
@@ -127,11 +151,27 @@ namespace StumeetAPI.Business.Concrete.Managers
                 Email = userForRegister.Email,
                 PhoneNumber = userForRegister.PhoneNumber,
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
+                PasswordSalt = passwordSalt,
+                CreationDate = DateTime.Now,
+                IsDeleted = false
             };
 
             userToCreate = await _userDal.Add(userToCreate);
             if (userToCreate == null)
+            {
+                return null;
+            }
+
+            var userAuth = await _authDal.Add(new Authentication
+            {
+                UserId = userToCreate.Id,
+                IsAuthenticated = false,
+                CreationDate = DateTime.Now,
+                IsDeleted = false,
+                AuthCode = GetMd5Hash(MD5.Create(), DateTime.Now.ToString("o"))
+            });
+
+            if (userAuth == null)
             {
                 return null;
             }
@@ -142,6 +182,16 @@ namespace StumeetAPI.Business.Concrete.Managers
                     {
                         Key = "Name",
                         Value = userToCreate.Name
+                    },
+                    new MailTemplateItem
+                    {
+                        Key = "Surname",
+                        Value = userToCreate.Surname
+                    },
+                    new MailTemplateItem
+                    {
+                        Key = "AuthLink",
+                        Value = string.Format("http://stumeet.com/dogrulama/{0}", userAuth.AuthCode)
                     }
                 });
 

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using StumeetAPI.Core.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace StumeetAPI.Entities.Concrete
 {
-    public partial class DataTypeExtension
+    public partial class DataTypeExtension : IEntity
     {
         public int Id { get; set; }
         public int DataTypeId { get; set; }

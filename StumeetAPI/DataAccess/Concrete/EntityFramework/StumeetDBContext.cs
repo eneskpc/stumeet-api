@@ -33,14 +33,6 @@ namespace StumeetAPI.DataAccess.Concrete.EntityFramework
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<WorkInformation> WorkInformation { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=StumeetDB;Trusted_Connection=True;");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");

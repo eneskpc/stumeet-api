@@ -14,7 +14,9 @@ namespace StumeetAPI.Business.ValidationRules.FluentValidation
             RuleFor(u => u.Name).NotEmpty().Length(2, 50);
             RuleFor(u => u.Surname).NotEmpty().Length(2, 50);
             RuleFor(u => u.BirthDate).NotEmpty().LessThan(DateTime.Now.AddYears(-16));
-            RuleFor(u => u.Email).NotEmpty().Must(email => email.EndsWith("edu.tr"));
+
+            //@ işareti olacak ve @ işaretinden sonra .edu içerecek regex yazılacak.
+            RuleFor(u => u.Email).NotEmpty().Must(email => email.Contains(".edu"));
             RuleFor(u => u.PasswordHash).NotEmpty();
             RuleFor(u => u.PasswordSalt).NotEmpty();
             RuleFor(u => u.CreationDate).NotEmpty();
