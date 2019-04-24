@@ -11,12 +11,12 @@ using StumeetAPI.Entities.Concrete;
 
 namespace StumeetAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AuthController : Controller
     {
         IUserService _userManager;
 
-        protected AuthController(IUserService userManager)
+        public AuthController(IUserService userManager)
         {
             _userManager = userManager;
         }
@@ -44,7 +44,10 @@ namespace StumeetAPI.Controllers
             {
                 return Unauthorized();
             }
-            return Ok(_userManager.CreateToken(user));
+            return Ok(new UserToken
+            {
+                Token = _userManager.CreateToken(user)
+            });
         }
 
         // POST api/<controller>
@@ -56,7 +59,7 @@ namespace StumeetAPI.Controllers
             {
                 return Unauthorized();
             }
-            return Ok(_userManager.CreateToken(user));
+            return Ok();
         }
 
         // PUT api/<controller>/5

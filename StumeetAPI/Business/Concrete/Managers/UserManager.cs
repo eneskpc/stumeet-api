@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -81,6 +82,12 @@ namespace StumeetAPI.Business.Concrete.Managers
                 return null;
             }
 
+            var authentication = _authDal.Get(a => a.UserId == user.Id && a.IsDeleted != true && a.IsAuthenticated);
+            if (authentication == null)
+            {
+                return null;
+            }
+
             if (!VerifyPasswordHash(userForLogin.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return null;
@@ -114,22 +121,13 @@ namespace StumeetAPI.Business.Concrete.Managers
 
         private static string GetMd5Hash(MD5 md5Hash, string input)
         {
-
-            // Convert the input string to a byte array and compute the hash.
             byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
             StringBuilder sBuilder = new StringBuilder();
-
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
             for (int i = 0; i < data.Length; i++)
             {
                 sBuilder.Append(data[i].ToString("x2"));
             }
 
-            // Return the hexadecimal string.
             return sBuilder.ToString();
         }
 
@@ -156,7 +154,7 @@ namespace StumeetAPI.Business.Concrete.Managers
                 IsDeleted = false
             };
 
-            userToCreate = await _userDal.Add(userToCreate);
+            userToCreate = await Add(userToCreate);
             if (userToCreate == null)
             {
                 return null;

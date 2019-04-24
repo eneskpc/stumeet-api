@@ -33,6 +33,15 @@ namespace StumeetAPI.DataAccess.Concrete.EntityFramework
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<WorkInformation> WorkInformation { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=77.245.159.10\\MSSQLSERVER2016;Database=stumeet_db_test;User Id=stumeet_user;Password=$B7agm82;");
+            }
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");

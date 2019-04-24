@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace StumeetAPI.Business.Concrete.Managers
 {
@@ -16,9 +17,9 @@ namespace StumeetAPI.Business.Concrete.Managers
         private readonly EmailSettings _emailSettings;
         private readonly IHostingEnvironment _env;
 
-        public MailManager(EmailSettings emailSettings, IHostingEnvironment env)
+        public MailManager(IOptions<EmailSettings> emailSettings, IHostingEnvironment env)
         {
-            _emailSettings = emailSettings;
+            _emailSettings = emailSettings.Value;
             _env = env;
         }
 

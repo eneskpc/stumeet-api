@@ -12,8 +12,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StumeetAPI.Business.Abstract;
 using StumeetAPI.Business.Concrete.Managers;
+using StumeetAPI.DataAccess.Abstract;
 using StumeetAPI.DataAccess.Concrete.EntityFramework;
 using StumeetAPI.DTOs;
+using StumeetAPI.Hubs;
 
 namespace StumeetAPI
 {
@@ -30,7 +32,7 @@ namespace StumeetAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
-            services.AddSingleton<IMailService, MailManager>();
+            services.AddScoped<IMailService, MailManager>();
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IAssetService, AssetManager>();
             services.AddScoped<IAuthenticationService, AuthenticationManager>();
@@ -46,7 +48,12 @@ namespace StumeetAPI
             services.AddScoped<IPostCommentService, PostCommentManager>();
             services.AddScoped<IUniversityService, UniversityManager>();
             services.AddScoped<IWorkInformationService, WorkInformationManager>();
-            services.AddDbContext<StumeetDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), builder => builder.UseRowNumberForPaging()));
+
+            services.AddScoped<IUserDal, EFUserDal>();
+            services.AddScoped<IAuthenticationDal, EFAuthenticationDal>();
+
+            services.AddSignalR();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -57,7 +64,19 @@ namespace StumeetAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
+            app.UseHttpsRedirection();
+            app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
+            app.UseAuthentication();
+            app.UseStaticFiles();
+            app.UseSignalR(options =>
+            {
+                options.MapHub<ChatHub>("/chat");
+            });
             app.UseMvc();
         }
     }

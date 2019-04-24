@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using StumeetAPI.DTOs;
 
 namespace StumeetAPI.Core.CrossCuttingConcerns.Validation.FluentValidation
 {
