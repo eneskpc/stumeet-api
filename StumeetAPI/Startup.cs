@@ -51,7 +51,13 @@ namespace StumeetAPI
 
             services.AddScoped<IUserDal, EFUserDal>();
             services.AddScoped<IAuthenticationDal, EFAuthenticationDal>();
-
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                    {
+                        builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials();
+                    });
+            });
             services.AddSignalR();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -70,7 +76,7 @@ namespace StumeetAPI
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseSignalR(options =>
