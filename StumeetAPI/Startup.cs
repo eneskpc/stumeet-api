@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using StumeetAPI.Business.Abstract;
 using StumeetAPI.Business.Concrete.Managers;
 using StumeetAPI.DataAccess.Abstract;
@@ -48,9 +51,11 @@ namespace StumeetAPI
             services.AddScoped<IPostCommentService, PostCommentManager>();
             services.AddScoped<IUniversityService, UniversityManager>();
             services.AddScoped<IWorkInformationService, WorkInformationManager>();
+            services.AddScoped<IMessageService, MessageManager>();
 
             services.AddScoped<IUserDal, EFUserDal>();
             services.AddScoped<IAuthenticationDal, EFAuthenticationDal>();
+            services.AddScoped<IMessageDal, EFMessageDal>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
@@ -77,7 +82,6 @@ namespace StumeetAPI
 
             app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
-            app.UseAuthentication();
             app.UseStaticFiles();
             app.UseSignalR(options =>
             {
