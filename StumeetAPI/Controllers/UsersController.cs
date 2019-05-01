@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StumeetAPI.Business.Abstract;
+using StumeetAPI.DTOs;
 using StumeetAPI.Entities.Concrete;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -93,10 +94,112 @@ namespace StumeetAPI.Controllers
             return Ok(userEducationList);
         }
 
+        [HttpPost("education-info")] //Yeni kayıt
+        public async Task<ActionResult> newUserEducationInfo([FromBody] EducationForRecord newEducation)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var userEducationInfo = await _educationInformationManager.Add(new EducationInformation
+            {
+                UniversityId = newEducation.UniversityId,
+                UserId = currentUser.Id,
+                CreationDate = DateTime.Now,
+                IsDeleted = false
+            });
+            if (userEducationInfo == null)
+            {
+                return BadRequest();
+            }
+            return Ok(userEducationInfo);
+        }
+
+        [HttpPut("education-info")] //Kayıt Güncelleme
+        public async Task<ActionResult> updateUserEducationInfo([FromBody] EducationForRecord updateEducation)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var userEducationList = await _educationInformationManager.Update(new EducationInformation
+            {
+                Id = updateEducation.Id,
+                UserId = currentUser.Id,
+                UniversityId = updateEducation.UniversityId,
+                UpdatedDate = DateTime.Now,
+                //CreationDate=null,
+                IsDeleted = false
+            });
+            if (userEducationList == null)
+            {
+                return BadRequest();
+            }
+            return Ok(userEducationList);
+        }
+
         [HttpGet("work-info")]
         public async Task<ActionResult> getUserWorkInfo(int userID)
         {
-            var userWorkList = await _workInformationManager.GetAll(u => u.IsDeleted != true && u.UserId == userID);
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var userWorkList = await _workInformationManager.GetAll(u => u.IsDeleted != true && u.UserId == currentUser.Id);
+            if (userWorkList == null)
+            {
+                return BadRequest();
+            }
+            return Ok(userWorkList);
+        }
+
+        [HttpPost("work-info")] //Yeni kayıt
+        public async Task<ActionResult> newUserWorkInfo([FromBody] WorkForRecord newWork)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var userWorkList = await _workInformationManager.Add(new WorkInformation
+            {
+                UserId = currentUser.Id,
+                CompanyName = newWork.CompanyName,
+                CreationDate = DateTime.Now,
+                IsDeleted = false
+            });
+            if (userWorkList == null)
+            {
+                return BadRequest();
+            }
+            return Ok(userWorkList);
+        }
+
+        [HttpPut("work-info")] //Kayıt Güncelleme
+        public async Task<ActionResult> updateUserWorkInfo([FromBody] WorkForRecord updateWork)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var userWorkList = await _workInformationManager.Update(new WorkInformation
+            {
+                Id = updateWork.Id,
+                UserId = currentUser.Id,
+                CompanyName = updateWork.CompanyName,
+                UpdatedDate = DateTime.Now,
+                //CreationDate=null,
+                IsDeleted = false
+            });
             if (userWorkList == null)
             {
                 return BadRequest();

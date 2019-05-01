@@ -28,7 +28,7 @@ namespace StumeetAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<controller>/5
+        // GET api/<controller>/login
         [HttpGet("{id}")]
         public string Get(int id)
         {
