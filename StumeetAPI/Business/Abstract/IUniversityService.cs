@@ -9,7 +9,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IUniversityService
     {
-        Task<List<University>> GetAll();
+        Task<List<University>> GetAll(Expression<Func<University, bool>> filter = null);
         Task<University> GetByID(int id);
         Task<University> GetByCondition(Expression<Func<University, bool>> filter = null);
         Task<University> Add(University user);

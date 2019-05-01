@@ -55,9 +55,25 @@ namespace StumeetAPI
             services.AddScoped<IWorkInformationService, WorkInformationManager>();
             services.AddScoped<IMessageService, MessageManager>();
 
+
             services.AddScoped<IUserDal, EFUserDal>();
+            services.AddScoped<IAssetDal, EFAssetDal>();
             services.AddScoped<IAuthenticationDal, EFAuthenticationDal>();
+            services.AddScoped<IDataTypeExtensionDal, EFDataTypeExtensionDal>();
+            services.AddScoped<IDataTypeDal, EFDataTypeDal>();
+            services.AddScoped<IDeletedMessageDal, EFDeletedMessageDal>();
+            services.AddScoped<IEducationInformationDal, EFEducationInformationDal>();
+            services.AddScoped<IEventParticipantDal, EFEventParticipantDal>();
+            services.AddScoped<IEventDal, EFEventDal>();
+            services.AddScoped<IMessageGroupDal, EFMessageGroupDal>();
             services.AddScoped<IMessageDal, EFMessageDal>();
+            services.AddScoped<IPostDal, EFPostDal>();
+            services.AddScoped<IPostCommentDal, EFPostCommentDal>();
+            services.AddScoped<IUniversityDal, EFUniversityDal>();
+            services.AddScoped<IWorkInformationDal, EFWorkInformationDal>();
+            services.AddScoped<IMessageDal, EFMessageDal>();
+
+
             services.Configure<IISServerOptions>(opt =>
             {
                 opt.AutomaticAuthentication = false;

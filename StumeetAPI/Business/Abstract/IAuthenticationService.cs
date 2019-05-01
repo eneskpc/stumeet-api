@@ -11,7 +11,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IAuthenticationService
     {
-        Task<List<Authentication>> GetAll();
+        Task<List<Authentication>> GetAll(Expression<Func<Authentication, bool>> filter = null);
         Task<Authentication> GetByID(int id);
         Task<Authentication> GetByCondition(Expression<Func<Authentication, bool>> filter = null);
         Task<Authentication> Add(Authentication user);

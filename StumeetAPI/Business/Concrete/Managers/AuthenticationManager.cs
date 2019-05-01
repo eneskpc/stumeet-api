@@ -70,11 +70,6 @@ namespace StumeetAPI.Business.Concrete.Managers
             };
         }
 
-        public async Task<List<Authentication>> GetAll()
-        {
-            return await _authenticationDal.GetList();
-        }
-
         public async Task<Authentication> GetByCondition(Expression<Func<Authentication, bool>> filter = null)
         {
             return await _authenticationDal.Get(filter);
@@ -89,6 +84,11 @@ namespace StumeetAPI.Business.Concrete.Managers
         {
             //ValidatorTool.Validate(new UserValidator(), asset);
             return await _authenticationDal.Update(authenticationDal);
+        }
+
+        public async Task<List<Authentication>> GetAll(Expression<Func<Authentication, bool>> filter = null)
+        {
+            return await _authenticationDal.GetList(filter);
         }
     }
 }

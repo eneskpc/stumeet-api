@@ -9,7 +9,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IPostService
     {
-        Task<List<Post>> GetAll();
+        Task<List<Post>> GetAll(Expression<Func<Post, bool>> filter = null);
         Task<Post> GetByID(int id);
         Task<Post> GetByCondition(Expression<Func<Post, bool>> filter = null);
         Task<Post> Add(Post user);

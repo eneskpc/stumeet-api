@@ -9,7 +9,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IMessageService
     {
-        Task<List<Message>> GetAll();
+        Task<List<Message>> GetAll(Expression<Func<Message, bool>> filter = null);
         Task<Message> GetByID(int id);
         Task<Message> GetByCondition(Expression<Func<Message, bool>> filter = null);
         Task<Message> Add(Message user);

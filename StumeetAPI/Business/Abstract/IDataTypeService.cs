@@ -9,7 +9,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IDataTypeService
     {
-        Task<List<DataType>> GetAll();
+        Task<List<DataType>> GetAll(Expression<Func<DataType, bool>> filter = null);
         Task<DataType> GetByID(int id);
         Task<DataType> GetByCondition(Expression<Func<DataType, bool>> filter = null);
         Task<DataType> Add(DataType user);

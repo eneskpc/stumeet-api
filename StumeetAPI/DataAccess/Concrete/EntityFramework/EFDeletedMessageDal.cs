@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StumeetAPI.DataAccess.Concrete.EntityFramework
 {
-    public class EFDeletedMassageDal : EFEntityRepository<DeletedMessage, StumeetDBContext>, IDeletedMessageDal
+    public class EFDeletedMessageDal : EFEntityRepository<DeletedMessage, StumeetDBContext>, IDeletedMessageDal
     {
     }
 }

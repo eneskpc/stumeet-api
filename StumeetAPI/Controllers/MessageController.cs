@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using StumeetAPI.Business.Abstract;
+using StumeetAPI.Entities.Concrete;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,16 +13,34 @@ namespace StumeetAPI.Controllers
     [Route("api/[controller]")]
     public class MessageController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private IMessageService _messageManager;
+        private IAuthenticationService _authManager;
+
+        public MessageController(IMessageService messageManager)
         {
-            return new string[] { "value1", "value2" };
+            _messageManager = messageManager;
+        }
+
+        // GET: api/<controller>
+        [HttpGet("{groupID}")]
+        public async Task<ActionResult> GetMessages(int groupID)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            var messageList = await _messageManager.GetAll(m => m.IsDeleted == true && m.GroupId == groupID);
+            if (messageList == null)
+            {
+                return BadRequest();
+            }
+            return Ok(messageList);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public string GetMessage(int id)
         {
             return "value";
         }

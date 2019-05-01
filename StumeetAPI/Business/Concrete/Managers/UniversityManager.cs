@@ -24,9 +24,9 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _universityDal.Add(university);
         }
 
-        public async Task<List<University>> GetAll()
+        public async Task<List<University>> GetAll(Expression<Func<University, bool>> filter = null)
         {
-            return await _universityDal.GetList();
+            return await _universityDal.GetList(filter);
         }
 
         public async Task<University> GetByCondition(Expression<Func<University, bool>> filter = null)

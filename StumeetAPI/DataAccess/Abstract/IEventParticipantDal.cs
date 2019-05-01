@@ -9,5 +9,6 @@ namespace StumeetAPI.DataAccess.Abstract
 {
     public interface IEventParticipantDal : IEntityRepository<EventParticipant>
     {
+
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
+
 namespace StumeetAPI.Business.Concrete.Managers
 {
     public class EventParticipantManager : IEventParticipantService
@@ -24,9 +25,9 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _eventParticipantDal.Add(eventParticipant);
         }
 
-        public async Task<List<EventParticipant>> GetAll()
+        public async Task<List<EventParticipant>> GetAll(Expression<Func<EventParticipant, bool>> filter = null)
         {
-            return await _eventParticipantDal.GetList();
+            return await _eventParticipantDal.GetList(filter);
         }
 
         public async Task<EventParticipant> GetByCondition(Expression<Func<EventParticipant, bool>> filter = null)

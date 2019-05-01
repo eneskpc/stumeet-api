@@ -4,19 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StumeetAPI.Business.Abstract;
+using StumeetAPI.Entities.Concrete;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace StumeetAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class UsersController : Controller
     {
         private IUserService _userManager;
+        private IEducationInformationService _educationInformationManager;
+        private IWorkInformationService _workInformationManager;
+        private IAuthenticationService _authManager;
 
-        public UsersController(IUserService userManager)
+        public UsersController(IUserService userManager, IEducationInformationService educationInformationManager, IWorkInformationService workInformationManager, IAuthenticationService authManager)
         {
             _userManager = userManager;
+            _educationInformationManager = educationInformationManager;
+            _workInformationManager = workInformationManager;
+            _authManager = authManager;
         }
 
         // GET: api/<controller>
@@ -37,7 +44,7 @@ namespace StumeetAPI.Controllers
         {
             //Auth etmiş kullanıcı ile şart gelecek
             var userList = await _userManager.GetAll(u => u.IsDeleted != true);
-            if(userList == null)
+            if (userList == null)
             {
                 return BadRequest();
             }
@@ -67,6 +74,34 @@ namespace StumeetAPI.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpGet("education-info")]
+        public async Task<ActionResult> getUserEducationInfo()
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var userEducationList = await _educationInformationManager.GetAll(u => u.IsDeleted != true && u.UserId == currentUser.Id);
+            if (userEducationList == null)
+            {
+                return BadRequest();
+            }
+            return Ok(userEducationList);
+        }
+
+        [HttpGet("work-info")]
+        public async Task<ActionResult> getUserWorkInfo(int userID)
+        {
+            var userWorkList = await _workInformationManager.GetAll(u => u.IsDeleted != true && u.UserId == userID);
+            if (userWorkList == null)
+            {
+                return BadRequest();
+            }
+            return Ok(userWorkList);
         }
     }
 }

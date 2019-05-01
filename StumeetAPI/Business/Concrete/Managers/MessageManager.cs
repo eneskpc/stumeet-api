@@ -24,9 +24,9 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _messageDal.Add(message);
         }
 
-        public async Task<List<Message>> GetAll()
+        public async Task<List<Message>> GetAll(Expression<Func<Message, bool>> filter = null)
         {
-            return await _messageDal.GetList();
+            return await _messageDal.GetList(filter);
         }
 
         public async Task<Message> GetByCondition(Expression<Func<Message, bool>> filter = null)

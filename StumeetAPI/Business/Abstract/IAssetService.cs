@@ -9,7 +9,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IAssetService
     {
-        Task<List<Asset>> GetAll();
+        Task<List<Asset>> GetAll(Expression<Func<Asset, bool>> filter = null);
         Task<Asset> GetByID(int id);
         Task<Asset> GetByCondition(Expression<Func<Asset, bool>> filter = null);
         Task<Asset> Add(Asset user);

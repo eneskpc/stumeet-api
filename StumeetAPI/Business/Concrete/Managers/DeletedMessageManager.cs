@@ -24,9 +24,9 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _deletedMessageDal.Add(deletedMessage);
         }
 
-        public async Task<List<DeletedMessage>> GetAll()
+        public async Task<List<DeletedMessage>> GetAll(Expression<Func<DeletedMessage, bool>> filter = null)
         {
-            return await _deletedMessageDal.GetList();
+            return await _deletedMessageDal.GetList(filter);
         }
 
         public async Task<DeletedMessage> GetByCondition(Expression<Func<DeletedMessage, bool>> filter = null)

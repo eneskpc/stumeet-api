@@ -24,9 +24,9 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _workInformationDal.Add(workInformation);
         }
 
-        public async Task<List<WorkInformation>> GetAll()
+        public async Task<List<WorkInformation>> GetAll(Expression<Func<WorkInformation, bool>> filter = null)
         {
-            return await _workInformationDal.GetList();
+            return await _workInformationDal.GetList(filter);
         }
 
         public async Task<WorkInformation> GetByCondition(Expression<Func<WorkInformation, bool>> filter = null)

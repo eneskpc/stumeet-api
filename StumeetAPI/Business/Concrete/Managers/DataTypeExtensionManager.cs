@@ -24,9 +24,10 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _dataTypeExtensionDal.Add(dataTypeExtension);
         }
 
-        public async Task<List<DataTypeExtension>> GetAll()
+
+        public async Task<List<DataTypeExtension>> GetAll(Expression<Func<DataTypeExtension, bool>> filter = null)
         {
-            return await _dataTypeExtensionDal.GetList();
+            return await _dataTypeExtensionDal.GetList(filter);
         }
 
         public async Task<DataTypeExtension> GetByCondition(Expression<Func<DataTypeExtension, bool>> filter = null)

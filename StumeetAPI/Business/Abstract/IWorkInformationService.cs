@@ -9,7 +9,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IWorkInformationService
     {
-        Task<List<WorkInformation>> GetAll();
+        Task<List<WorkInformation>> GetAll(Expression<Func<WorkInformation, bool>> filter = null);
         Task<WorkInformation> GetByID(int id);
         Task<WorkInformation> GetByCondition(Expression<Func<WorkInformation, bool>> filter = null);
         Task<WorkInformation> Add(WorkInformation user);

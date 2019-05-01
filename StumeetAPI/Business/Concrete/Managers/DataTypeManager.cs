@@ -24,9 +24,9 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _dataTypeDal.Add(dataType);
         }
 
-        public async Task<List<DataType>> GetAll()
+        public async Task<List<DataType>> GetAll(Expression<Func<DataType, bool>> filter = null)
         {
-            return await _dataTypeDal.GetList();
+            return await _dataTypeDal.GetList(filter);
         }
 
         public async Task<DataType> GetByCondition(Expression<Func<DataType, bool>> filter = null)

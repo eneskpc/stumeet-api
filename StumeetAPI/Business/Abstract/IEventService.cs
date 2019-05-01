@@ -9,7 +9,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IEventService
     {
-        Task<List<Event>> GetAll();
+        Task<List<Event>> GetAll(Expression<Func<Event, bool>> filter = null);
         Task<Event> GetByID(int id);
         Task<Event> GetByCondition(Expression<Func<Event, bool>> filter = null);
         Task<Event> Add(Event user);

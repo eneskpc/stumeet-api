@@ -24,9 +24,9 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _eventDal.Add(eventInfo);
         }
 
-        public async Task<List<Event>> GetAll()
+        public async Task<List<Event>> GetAll(Expression<Func<Event, bool>> filter = null)
         {
-            return await _eventDal.GetList();
+            return await _eventDal.GetList(filter);
         }
 
         public async Task<Event> GetByCondition(Expression<Func<Event, bool>> filter = null)

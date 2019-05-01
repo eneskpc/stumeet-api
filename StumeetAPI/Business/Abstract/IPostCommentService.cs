@@ -9,7 +9,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IPostCommentService
     {
-        Task<List<PostComment>> GetAll();
+        Task<List<PostComment>> GetAll(Expression<Func<PostComment, bool>> filter = null);
         Task<PostComment> GetByID(int id);
         Task<PostComment> GetByCondition(Expression<Func<PostComment, bool>> filter = null);
         Task<PostComment> Add(PostComment user);

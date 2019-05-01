@@ -9,7 +9,7 @@ namespace StumeetAPI.Business.Abstract
 {
     public interface IDeletedMessageService
     {
-        Task<List<DeletedMessage>> GetAll();
+        Task<List<DeletedMessage>> GetAll(Expression<Func<DeletedMessage, bool>> filter = null);
         Task<DeletedMessage> GetByID(int id);
         Task<DeletedMessage> GetByCondition(Expression<Func<DeletedMessage, bool>> filter = null);
         Task<DeletedMessage> Add(DeletedMessage user);

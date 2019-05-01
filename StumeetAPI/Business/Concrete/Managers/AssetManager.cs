@@ -26,9 +26,9 @@ namespace StumeetAPI.Business.Concrete.Managers
             return await _assetDal.Add(asset);
         }
 
-        public async Task<List<Asset>> GetAll()
+        public async Task<List<Asset>> GetAll(Expression<Func<Asset, bool>> filter = null)
         {
-            return await _assetDal.GetList();
+            return await _assetDal.GetList(filter);
         }
 
         public async Task<Asset> GetByCondition(Expression<Func<Asset, bool>> filter = null)
