@@ -58,6 +58,10 @@ namespace StumeetAPI
             services.AddScoped<IUserDal, EFUserDal>();
             services.AddScoped<IAuthenticationDal, EFAuthenticationDal>();
             services.AddScoped<IMessageDal, EFMessageDal>();
+            services.Configure<IISServerOptions>(opt =>
+            {
+                opt.AutomaticAuthentication = false;
+            });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -95,6 +99,7 @@ namespace StumeetAPI
             app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseSignalR(options =>
             {
                 options.MapHub<ChatHub>("/chat");
