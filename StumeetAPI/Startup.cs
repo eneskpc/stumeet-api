@@ -34,6 +34,8 @@ namespace StumeetAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            byte[] key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
+
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddScoped<IMailService, MailManager>();
             services.AddScoped<IUserService, UserManager>();
@@ -56,6 +58,16 @@ namespace StumeetAPI
             services.AddScoped<IUserDal, EFUserDal>();
             services.AddScoped<IAuthenticationDal, EFAuthenticationDal>();
             services.AddScoped<IMessageDal, EFMessageDal>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>

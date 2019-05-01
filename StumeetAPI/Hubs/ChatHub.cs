@@ -21,7 +21,7 @@ namespace StumeetAPI.Hubs
         }
         public async Task NewMessage(MessageForChatHub message)
         {
-            Console.Write(Context.User?.FindFirst(ClaimTypes.Email)?.Value);
+            string jwtToken = Context.GetHttpContext().Request.Query["access_token"][0];
             Message recordedMessage = await _messageManager.Add(new Message
             {
                 UserId = message.UserId,
