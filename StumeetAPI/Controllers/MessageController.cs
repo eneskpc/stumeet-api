@@ -10,19 +10,20 @@ using StumeetAPI.Entities.Concrete;
 
 namespace StumeetAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class MessageController : Controller
     {
         private IMessageService _messageManager;
         private IAuthenticationService _authManager;
 
-        public MessageController(IMessageService messageManager)
+        public MessageController(IMessageService messageManager, IAuthenticationService authManager)
         {
             _messageManager = messageManager;
+            _authManager = authManager;
         }
 
         // GET: api/<controller>
-        [HttpGet("{groupID}")]
+        [HttpGet("list/{groupID}")]
         public async Task<ActionResult> GetMessages(int groupID)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
@@ -30,7 +31,7 @@ namespace StumeetAPI.Controllers
             {
                 return Unauthorized(errorDetail);
             }
-            var messageList = await _messageManager.GetAll(m => m.IsDeleted == true && m.GroupId == groupID);
+            var messageList = await _messageManager.GetAll(m => m.IsDeleted != true && m.GroupId == groupID);
             if (messageList == null)
             {
                 return BadRequest();
