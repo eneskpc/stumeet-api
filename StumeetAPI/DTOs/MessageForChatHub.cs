@@ -7,7 +7,6 @@ namespace StumeetAPI.DTOs
 {
     public class MessageForChatHub
     {
-        public int UserId { get; set; }
         public int GroupId { get; set; }
         public string MessageContent { get; set; }
     }

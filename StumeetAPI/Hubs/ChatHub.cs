@@ -15,23 +15,33 @@ namespace StumeetAPI.Hubs
     public class ChatHub : Hub
     {
         private IMessageService _messageManager;
-        public ChatHub(IMessageService messageManager)
+        private IAuthenticationService _authManager;
+
+        public ChatHub(IMessageService messageManager, IAuthenticationService authManager)
         {
             _messageManager = messageManager;
+            _authManager = authManager;
         }
+
         public async Task NewMessage(MessageForChatHub message)
         {
             string jwtToken = Context.GetHttpContext().Request.Query["access_token"][0];
-            Message recordedMessage = await _messageManager.Add(new Message
+            var errorDetail = await _authManager.CheckUser(jwtToken);
+            if (errorDetail.StatusCode == 200)
             {
-                UserId = message.UserId,
-                MessageContent = message.MessageContent,
-                GroupId = message.GroupId,
-                IsDeleted = false,
-                CreationDate = DateTime.Now
-            });
-            if (recordedMessage != null)
-                await Clients.All.SendAsync("messageReceived", recordedMessage);
+                User currentUser = errorDetail.Data;
+
+                Message recordedMessage = await _messageManager.Add(new Message
+                {
+                    UserId = currentUser.Id,
+                    MessageContent = message.MessageContent,
+                    GroupId = message.GroupId,
+                    IsDeleted = false,
+                    CreationDate = DateTime.Now
+                });
+                if (recordedMessage != null)
+                    await Clients.All.SendAsync("messageReceived", recordedMessage);
+            }
         }
     }
 }
