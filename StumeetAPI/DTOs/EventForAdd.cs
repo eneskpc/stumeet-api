@@ -7,6 +7,11 @@ namespace StumeetAPI.DTOs
 {
     public class EventForAdd
     {
-        public int MyProperty { get; set; }
+        public int EventType { get; set; }
+        public string EventName { get; set; }
+        public DateTime EventDate { get; set; }
+        public string OpenAddress { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

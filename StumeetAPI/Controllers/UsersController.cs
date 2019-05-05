@@ -123,7 +123,7 @@ namespace StumeetAPI.Controllers
         }
 
         [HttpPut("education-info")] //Kayıt Güncelleme
-        public async Task<ActionResult> updateUserEducationInfo([FromBody] EducationForRecord updateEducation)
+        public async Task<ActionResult> updateUserEducationInfo([FromBody] EducationInformation updateEducation)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
             if (errorDetail.StatusCode != 200)
@@ -131,18 +131,11 @@ namespace StumeetAPI.Controllers
                 return Unauthorized(errorDetail);
             }
             User currentUser = errorDetail.Data;
-            var userEducationList = await _educationInformationManager.Update(new EducationInformation
-            {
-                Id = updateEducation.Id,
-                UserId = currentUser.Id,
-                UniversityId = updateEducation.UniversityId,
-                UpdatedDate = DateTime.Now,
-                //CreationDate=null,
-                IsDeleted = false
-            });
+            updateEducation.UpdatedDate = DateTime.Now;
+            var userEducationList = await _educationInformationManager.Update(updateEducation);
             if (userEducationList == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(userEducationList);
         }
@@ -188,7 +181,7 @@ namespace StumeetAPI.Controllers
         }
 
         [HttpPut("work-info")] //Kayıt Güncelleme
-        public async Task<ActionResult> updateUserWorkInfo([FromBody] WorkForRecord updateWork)
+        public async Task<ActionResult> updateUserWorkInfo([FromBody] WorkInformation updateWork)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
             if (errorDetail.StatusCode != 200)
@@ -196,18 +189,11 @@ namespace StumeetAPI.Controllers
                 return Unauthorized(errorDetail);
             }
             User currentUser = errorDetail.Data;
-            var userWorkList = await _workInformationManager.Update(new WorkInformation
-            {
-                Id = updateWork.Id,
-                UserId = currentUser.Id,
-                CompanyName = updateWork.CompanyName,
-                UpdatedDate = DateTime.Now,
-                //CreationDate=null,
-                IsDeleted = false
-            });
+            updateWork.UpdatedDate = DateTime.Now;
+            var userWorkList = await _workInformationManager.Update(updateWork);
             if (userWorkList == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(userWorkList);
         }

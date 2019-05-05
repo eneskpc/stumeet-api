@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StumeetAPI.Business.Abstract;
+using StumeetAPI.DTOs;
 using StumeetAPI.Entities.Concrete;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -60,7 +61,7 @@ namespace StumeetAPI.Controllers
 
         // POST: api/<controller>
         [HttpPost]
-        public async Task<ActionResult> AddEvent([FromBody])
+        public async Task<ActionResult> AddEvent([FromBody] EventForAdd eventForAdd)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
             if (errorDetail.StatusCode != 200)
@@ -68,12 +69,41 @@ namespace StumeetAPI.Controllers
                 return Unauthorized(errorDetail);
             }
             User currentUser = errorDetail.Data;
-            var eventParticipantList = await _eventParticipantManager.GetAll(u => u.IsDeleted != true && u.EventId == id);
-            if (eventParticipantList == null)
+            var recordedEvent = await _eventManager.Add(new Event
             {
-                return BadRequest();
+                EventType = eventForAdd.EventType,
+                EventName = eventForAdd.EventName,
+                EventDate = eventForAdd.EventDate,
+                OpenAddress = eventForAdd.OpenAddress,
+                Latitude = eventForAdd.Latitude,
+                Longitude = eventForAdd.Longitude,
+                CreationDate = DateTime.Now,
+                IsDeleted = false
+            });
+            if (recordedEvent == null)
+            {
+                return NotFound();
             }
-            return Ok(eventParticipantList);
+            return Ok(recordedEvent);
+        }
+
+        // POST: api/<controller>
+        [HttpPost]
+        public async Task<ActionResult> UpdateEvent([FromBody] Event eventForAdd)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            eventForAdd.UpdatedDate = DateTime.Now;
+            var recordedEvent = await _eventManager.Add(eventForAdd);
+            if (recordedEvent == null)
+            {
+                return NotFound();
+            }
+            return Ok(recordedEvent);
         }
     }
 }
