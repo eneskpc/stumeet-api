@@ -43,7 +43,12 @@ namespace StumeetAPI.Controllers
         [HttpGet("myfriends")]
         public async Task<ActionResult> GetMyFriends()
         {
-            //Auth etmiş kullanıcı ile şart gelecek
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
             var userList = await _userManager.GetAll(u => u.IsDeleted != true);
             if (userList == null)
             {

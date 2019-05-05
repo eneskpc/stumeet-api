@@ -27,12 +27,12 @@ namespace StumeetAPI.Business.Concrete.Managers
 
         public async Task<List<EventParticipant>> GetAll(Expression<Func<EventParticipant, bool>> filter = null)
         {
-            return await _eventParticipantDal.GetList(filter);
+            return await _eventParticipantDal.GetListWithInclude(filter);
         }
 
         public async Task<EventParticipant> GetByCondition(Expression<Func<EventParticipant, bool>> filter = null)
         {
-            return await _eventParticipantDal.Get(filter);
+            return await _eventParticipantDal.GetWithInclude(filter);
         }
 
         public async Task<EventParticipant> GetByID(int id)
