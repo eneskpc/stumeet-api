@@ -143,6 +143,10 @@ namespace StumeetAPI.DataAccess.Concrete.EntityFramework
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.EventId).HasColumnName("EventID");
+
+                entity.Property(e => e.InvitationReply).HasColumnName("InvitationReply");
             });
 
             modelBuilder.Entity<Event>(entity =>

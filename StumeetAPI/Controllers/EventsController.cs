@@ -10,7 +10,7 @@ using StumeetAPI.Entities.Concrete;
 
 namespace StumeetAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class EventsController : Controller
     {
         private IEventService _eventManager;
@@ -19,9 +19,10 @@ namespace StumeetAPI.Controllers
         private IWorkInformationService _workInformationManager;
         private IAuthenticationService _authManager;
 
-        public EventsController(IEventService eventManager, IEducationInformationService educationInformationManager, IWorkInformationService workInformationManager, IAuthenticationService authManager)
+        public EventsController(IEventService eventManager, IEventParticipantService eventParticipantManager, IEducationInformationService educationInformationManager, IWorkInformationService workInformationManager, IAuthenticationService authManager)
         {
             _eventManager = eventManager;
+            _eventParticipantManager = eventParticipantManager;
             _educationInformationManager = educationInformationManager;
             _workInformationManager = workInformationManager;
             _authManager = authManager;
@@ -40,8 +41,8 @@ namespace StumeetAPI.Controllers
         }
 
         // GET: api/<controller>
-        [HttpGet("eventParticipants")]
-        public async Task<ActionResult> GetEventParticipants()
+        [HttpGet("{id}/participants")]
+        public async Task<ActionResult> GetEventParticipants(int id)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
             if (errorDetail.StatusCode != 200)
@@ -49,7 +50,7 @@ namespace StumeetAPI.Controllers
                 return Unauthorized(errorDetail);
             }
             User currentUser = errorDetail.Data;
-            var eventParticipantList = await _eventParticipantManager.GetAll(u => u.IsDeleted != true);
+            var eventParticipantList = await _eventParticipantManager.GetAll(u => u.IsDeleted != true && u.EventId == id);
             if (eventParticipantList == null)
             {
                 return BadRequest();
@@ -57,36 +58,22 @@ namespace StumeetAPI.Controllers
             return Ok(eventParticipantList);
         }
 
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
+        // POST: api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<ActionResult> AddEvent([FromBody])
         {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var eventParticipantList = await _eventParticipantManager.GetAll(u => u.IsDeleted != true && u.EventId == id);
+            if (eventParticipantList == null)
+            {
+                return BadRequest();
+            }
+            return Ok(eventParticipantList);
         }
     }
 }

@@ -17,8 +17,8 @@ namespace StumeetAPI.DataAccess.Concrete.EntityFramework
             using (var context = new StumeetDBContext())
             {
                 return filter == null ?
-                    await context.Set<EventParticipant>().Include("User").ToListAsync() :
-                    await context.Set<EventParticipant>().Include("User").Where(filter).ToListAsync();
+                    await context.Set<EventParticipant>().Include("User").Include("Event").ToListAsync() :
+                    await context.Set<EventParticipant>().Include("User").Include("Event").Where(filter).ToListAsync();
             }
         }
 
@@ -27,8 +27,8 @@ namespace StumeetAPI.DataAccess.Concrete.EntityFramework
             using (var context = new StumeetDBContext())
             {
                 return filter == null ?
-                    await context.Set<EventParticipant>().Include("User").FirstOrDefaultAsync() :
-                    await context.Set<EventParticipant>().Include("User").Where(filter).FirstOrDefaultAsync();
+                    await context.Set<EventParticipant>().Include("User").Include("Event").FirstOrDefaultAsync() :
+                    await context.Set<EventParticipant>().Include("User").Include("Event").Where(filter).FirstOrDefaultAsync();
             }
         }
     }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace StumeetAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class PostsController : Controller
     {
         // GET: api/<controller>
