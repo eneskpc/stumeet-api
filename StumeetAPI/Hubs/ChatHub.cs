@@ -40,7 +40,10 @@ namespace StumeetAPI.Hubs
                     CreationDate = DateTime.Now
                 });
                 if (recordedMessage != null)
+                {
+                    recordedMessage.User = currentUser;
                     await Clients.All.SendAsync("messageReceived", recordedMessage);
+                }
             }
         }
     }
