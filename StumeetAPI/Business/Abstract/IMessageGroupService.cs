@@ -14,5 +14,10 @@ namespace StumeetAPI.Business.Abstract
         Task<MessageGroup> GetByCondition(Expression<Func<MessageGroup, bool>> filter = null);
         Task<MessageGroup> Add(MessageGroup user);
         Task<MessageGroup> Update(MessageGroup user);
+
+        Task<List<User>> GetAllMembers(Expression<Func<MessageGroupMember, bool>> filter = null);
+        Task<User> GetMember(Expression<Func<MessageGroupMember, bool>> filter = null);
+        Task<List<MessageGroup>> GetAllMembersReturnGroup(Expression<Func<MessageGroupMember, bool>> filter = null);
+        Task<MessageGroup> GetMemberReturnGroup(Expression<Func<MessageGroupMember, bool>> filter = null);
     }
 }

@@ -13,5 +13,8 @@ namespace StumeetAPI.Entities.Concrete
         public DateTime CreationDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
+
+        public User User { get; set; }
+        public MessageGroup Group { get; set; }
     }
 }

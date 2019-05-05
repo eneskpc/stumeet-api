@@ -66,6 +66,7 @@ namespace StumeetAPI
             services.AddScoped<IEventParticipantDal, EFEventParticipantDal>();
             services.AddScoped<IEventDal, EFEventDal>();
             services.AddScoped<IMessageGroupDal, EFMessageGroupDal>();
+            services.AddScoped<IMessageGroupMemberDal, EFMessageGroupMemberDal>();
             services.AddScoped<IMessageDal, EFMessageDal>();
             services.AddScoped<IPostDal, EFPostDal>();
             services.AddScoped<IPostCommentDal, EFPostCommentDal>();
