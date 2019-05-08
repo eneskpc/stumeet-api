@@ -87,7 +87,38 @@ namespace StumeetAPI.Controllers
             {
                 ResponseText = "Success",
                 StatusCode = 200,
-                Data = await _messageGroupManager.GetAllMembersReturnGroup(mgm => mgm.IsDeleted != true && mgm.UserId == currentUser.Id && mgm.GroupId == id)
+                Data = await _messageGroupManager.GetMemberReturnGroup(mgm => mgm.IsDeleted != true && mgm.UserId == currentUser.Id && mgm.GroupId == id)
+            });
+        }
+
+        // GET api/messages/group
+        [HttpGet("group/{id}/participants")]
+        public async Task<ActionResult> GetGroupParticipants(int id)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+
+            User currentUser = errorDetail.Data;
+
+            var groupParticipants = await _messageGroupManager.GetAllMembers(mgm => mgm.IsDeleted != true && mgm.GroupId == id);
+
+            if (groupParticipants.FindIndex(u => u.Id == currentUser.Id) == -1)
+            {
+                return Unauthorized(new CustomResponse
+                {
+                    ResponseText = "This group has not authenticated user.",
+                    StatusCode = 401
+                });
+            }
+
+            return Ok(new CustomResponse
+            {
+                ResponseText = "Success",
+                StatusCode = 200,
+                Data = groupParticipants
             });
         }
 

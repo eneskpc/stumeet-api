@@ -33,10 +33,21 @@ namespace StumeetAPI.Controllers
         [HttpGet]
         public async Task<ActionResult> GetEvents()
         {
-            var eventList = await _eventManager.GetAll(u => u.IsDeleted != true);
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var eventsOfUser = await _eventParticipantManager.GetAll(u => u.UserId == currentUser.Id && u.IsDeleted != true);
+            if (eventsOfUser == null)
+            {
+                return NotFound();
+            }
+            var eventList = await _eventManager.GetAll(u => u.IsDeleted != true && eventsOfUser.Select(a => a.EventId).Contains(u.Id));
             if (eventList == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(eventList);
         }
