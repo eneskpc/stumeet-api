@@ -100,7 +100,7 @@ namespace StumeetAPI.Controllers
 
         // POST: api/<controller>
         [HttpPost]
-        public async Task<ActionResult> UpdateEvent([FromBody] Event eventForAdd)
+        public async Task<ActionResult> UpdateEvent([FromBody] Event eventForUpdate)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
             if (errorDetail.StatusCode != 200)
@@ -108,8 +108,56 @@ namespace StumeetAPI.Controllers
                 return Unauthorized(errorDetail);
             }
             User currentUser = errorDetail.Data;
-            eventForAdd.UpdatedDate = DateTime.Now;
-            var recordedEvent = await _eventManager.Add(eventForAdd);
+            eventForUpdate.UpdatedDate = DateTime.Now;
+            var recordedEvent = await _eventManager.Add(eventForUpdate);
+            if (recordedEvent == null)
+            {
+                return NotFound();
+            }
+            return Ok(recordedEvent);
+        }
+
+        // POST: api/<controller>
+        [HttpPost]
+        public async Task<ActionResult> AddEventParticipant([FromBody] EventParticipantForAdd eventParticipantForAdd)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var recordedEventParticipant = await _eventParticipantManager.Add(new EventParticipant
+            {
+                EventId = eventParticipantForAdd.EventId,
+                UserId = eventParticipantForAdd.UserId,
+                InvitationReply = "M",
+                CreationDate = DateTime.Now,
+                IsDeleted = false
+            });
+            if (recordedEventParticipant == null)
+            {
+                return BadRequest();
+            }
+            return Ok(recordedEventParticipant);
+        }
+
+        // POST: api/<controller>
+        [HttpPost]
+        public async Task<ActionResult> UpdateEventParticipant([FromBody] EventParticipant eventParticipantForUpdate)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            if(currentUser.Id != eventParticipantForUpdate.UserId)
+            {
+                return Unauthorized();
+            }
+            eventParticipantForUpdate.UpdatedDate = DateTime.Now;
+            var recordedEvent = await _eventParticipantManager.Add(eventParticipantForUpdate);
             if (recordedEvent == null)
             {
                 return NotFound();
