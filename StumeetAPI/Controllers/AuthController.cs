@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StumeetAPI.Business.Abstract;
 using StumeetAPI.DTOs;
@@ -11,6 +12,8 @@ using StumeetAPI.Entities.Concrete;
 
 namespace StumeetAPI.Controllers
 {
+    [Authorize]
+    [ApiController]
     [Route("[controller]")]
     public class AuthController : Controller
     {
@@ -36,6 +39,7 @@ namespace StumeetAPI.Controllers
         }
 
         // POST api/<controller>
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody]UserForLogin _user)
         {
@@ -51,6 +55,7 @@ namespace StumeetAPI.Controllers
         }
 
         // POST api/<controller>
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody]UserForRegister _user)
         {
