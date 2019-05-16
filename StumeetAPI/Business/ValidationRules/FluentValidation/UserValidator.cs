@@ -18,7 +18,7 @@ namespace StumeetAPI.Business.ValidationRules.FluentValidation
             RuleFor(u => u.PasswordHash).NotEmpty();
             RuleFor(u => u.PasswordSalt).NotEmpty();
             RuleFor(u => u.CreationDate).NotEmpty();
-            RuleFor(u => u.PhoneNumber).Must(phoneNumber => phoneNumber.Length == 10);
+            RuleFor(u => u.PhoneNumber).Must(phoneNumber => phoneNumber.Length == 0 || phoneNumber.Length == 10);
         }
     }
 }

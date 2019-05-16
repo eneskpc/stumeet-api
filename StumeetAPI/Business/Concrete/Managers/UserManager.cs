@@ -133,7 +133,7 @@ namespace StumeetAPI.Business.Concrete.Managers
 
         public async Task<User> Register(UserForRegister userForRegister)
         {
-            if (await _userDal.Get(u => u.Email == userForRegister.Email) != null)
+            if (await _userDal.Get(u => u.Email == userForRegister.Email) != null || userForRegister.Password != userForRegister.PasswordRepeat)
             {
                 return null;
             }
@@ -145,7 +145,7 @@ namespace StumeetAPI.Business.Concrete.Managers
             {
                 Name = userForRegister.Name,
                 Surname = userForRegister.Surname,
-                BirthDate = userForRegister.BirthDate,
+                BirthDate = DateTime.Parse(userForRegister.BirthDate),
                 Email = userForRegister.Email,
                 PhoneNumber = userForRegister.PhoneNumber,
                 PasswordHash = passwordHash,
@@ -189,7 +189,7 @@ namespace StumeetAPI.Business.Concrete.Managers
                     new MailTemplateItem
                     {
                         Key = "AuthLink",
-                        Value = string.Format("http://stumeet.com/dogrulama/{0}", userAuth.AuthCode)
+                        Value = string.Format("https://www.stumeet.com/dogrulama/{0}", userAuth.AuthCode)
                     }
                 });
 

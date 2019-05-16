@@ -24,20 +24,6 @@ namespace StumeetAPI.Controllers
             _userManager = userManager;
         }
 
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<controller>/login
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<controller>
         [AllowAnonymous]
         [HttpPost("login")]
@@ -65,18 +51,6 @@ namespace StumeetAPI.Controllers
                 return Unauthorized();
             }
             return Ok();
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
