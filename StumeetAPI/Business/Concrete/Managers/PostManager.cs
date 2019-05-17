@@ -26,17 +26,17 @@ namespace StumeetAPI.Business.Concrete.Managers
 
         public async Task<List<Post>> GetAll(Expression<Func<Post, bool>> filter = null)
         {
-            return await _postDal.GetList(filter);
+            return await _postDal.GetListWithInclude(filter);
         }
 
         public async Task<Post> GetByCondition(Expression<Func<Post, bool>> filter = null)
         {
-            return await _postDal.Get(filter);
+            return await _postDal.GetWithInclude(filter);
         }
 
         public async Task<Post> GetByID(int id)
         {
-            return await _postDal.Get(u => u.Id == id);
+            return await _postDal.GetWithInclude(u => u.Id == id);
         }
 
         public async Task<Post> Update(Post post)
