@@ -40,7 +40,33 @@ namespace StumeetAPI.Controllers
         }
 
         // GET: api/<controller>
-        [HttpGet("myfriends")]
+        [HttpGet("mine")]
+        public async Task<ActionResult> GetAuthUser()
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            return Ok(currentUser);
+        }
+
+        // GET: api/<controller>
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetUserById(int id)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            return Ok(currentUser);
+        }
+
+        // GET: api/<controller>
+        [HttpGet("mine/myfriends")]
         public async Task<ActionResult> GetMyFriends()
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
@@ -57,32 +83,7 @@ namespace StumeetAPI.Controllers
             return Ok(userList);
         }
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
-        [HttpGet("education-info")]
+        [HttpGet("mine/education-info")]
         public async Task<ActionResult> getUserEducationInfo()
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
@@ -140,7 +141,7 @@ namespace StumeetAPI.Controllers
             return Ok(userEducationList);
         }
 
-        [HttpGet("work-info")]
+        [HttpGet("mine/work-info")]
         public async Task<ActionResult> getUserWorkInfo(int userID)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);

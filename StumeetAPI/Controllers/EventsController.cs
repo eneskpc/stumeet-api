@@ -53,6 +53,29 @@ namespace StumeetAPI.Controllers
         }
 
         // GET: api/<controller>
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetEventById(int id)
+        {
+            var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
+            if (errorDetail.StatusCode != 200)
+            {
+                return Unauthorized(errorDetail);
+            }
+            User currentUser = errorDetail.Data;
+            var eventsOfUser = await _eventParticipantManager.GetAll(u => u.UserId == currentUser.Id && u.IsDeleted != true);
+            if (eventsOfUser == null || id == 0)
+            {
+                return NotFound();
+            }
+            var eventList = await _eventManager.GetByID(id);
+            if (eventList == null)
+            {
+                return NotFound();
+            }
+            return Ok(eventList);
+        }
+
+        // GET: api/<controller>
         [HttpGet("{id}/participants")]
         public async Task<ActionResult> GetEventParticipants(int id)
         {
@@ -99,7 +122,7 @@ namespace StumeetAPI.Controllers
         }
 
         // POST: api/<controller>
-        [HttpPost]
+        [HttpPut]
         public async Task<ActionResult> UpdateEvent([FromBody] Event eventForUpdate)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
@@ -118,7 +141,7 @@ namespace StumeetAPI.Controllers
         }
 
         // POST: api/<controller>
-        [HttpPost]
+        [HttpPost("{id}/participants")]
         public async Task<ActionResult> AddEventParticipant([FromBody] EventParticipantForAdd eventParticipantForAdd)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
@@ -143,7 +166,7 @@ namespace StumeetAPI.Controllers
         }
 
         // POST: api/<controller>
-        [HttpPost]
+        [HttpPut("{id}/participants")]
         public async Task<ActionResult> UpdateEventParticipant([FromBody] EventParticipant eventParticipantForUpdate)
         {
             var errorDetail = await _authManager.CheckUser(Request.Headers["Authorization"]);
@@ -152,12 +175,12 @@ namespace StumeetAPI.Controllers
                 return Unauthorized(errorDetail);
             }
             User currentUser = errorDetail.Data;
-            if(currentUser.Id != eventParticipantForUpdate.UserId)
+            if (currentUser.Id != eventParticipantForUpdate.UserId)
             {
                 return Unauthorized();
             }
             eventParticipantForUpdate.UpdatedDate = DateTime.Now;
-            var recordedEvent = await _eventParticipantManager.Add(eventParticipantForUpdate);
+            var recordedEvent = await _eventParticipantManager.Update(eventParticipantForUpdate);
             if (recordedEvent == null)
             {
                 return NotFound();

@@ -17,8 +17,8 @@ namespace StumeetAPI.DataAccess.Concrete.EntityFramework
             using (var context = new StumeetDBContext())
             {
                 return filter == null ?
-                    await context.Set<Post>().Include("User").ToListAsync() :
-                    await context.Set<Post>().Include("User").Where(filter).ToListAsync();
+                    await context.Set<Post>().Include("User").OrderByDescending(p => p.CreationDate).ThenByDescending(p => p.Id).ToListAsync() :
+                    await context.Set<Post>().Include("User").OrderByDescending(p => p.CreationDate).ThenByDescending(p => p.Id).Where(filter).ToListAsync();
             }
         }
 
